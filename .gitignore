@@ -1,0 +1,23 @@
+# Folder output kompilasi Java
+/out/
+*.class
+
+# File sumber kompilasi
+sources.txt
+
+# File data storage (cold & replica)
+data/
+*.dat
+
+# Cache IDE (opsional jika pakai VS Code, IntelliJ, dll)
+.idea/
+.vscode/
+*.iml
+
+# File sistem OS
+.DS_Store
+Thumbs.db
+
+# Backup sementara
+*.log
+*.tmp
