@@ -23,8 +23,8 @@ KVStoreLite/
 │   │   ├── BinaryEncoder.java      # Untuk encoding dan decoding ke biner
 │   │   └── Config.java             # Konfigurasi jumlah shard, path file, dll
 │   │
-│   └── cli/                        # CLI atau main class untuk testing
-│       └── Main.java               # Untuk menjalankan eksperimen (put/get dsb)
+│   ├── Main.java    # Untuk menjalankan eksperimen (put/get dsb)
+│                   
 │
 ├── data/                           # Folder penyimpanan file cold storage
 │   ├── colddata-shard0.dat
@@ -36,4 +36,20 @@ KVStoreLite/
 │
 ├── README.md                       # Dokumentasi proyek
 ├── .gitignore                      # Abaikan *.class, /data, dll
+```
+## Cara Menjalankan KVStoreLite
+1. Git Clone repository ini
+2. Buka terminal dan pastikan sudah berada pada directory KVStoreLite
+3. Ketik perintah berikut pada terminal: find src -name "*.java" > sources.txt
+4. Ketik perintah berikut pada terminal: javac -d out @sources.txt
+5. Ketik perintah berikut pada terminal: java -cp out cli.Main
+
+Gunakan perintah interaktif di CLI seperti:
+```
+put <key> <value>       - Menyimpan pasangan key-value
+get <key>               - Mengambil nilai berdasarkan key
+check <key>             - Mengecek apakah key ada di hot storage
+hexdump <shardId>       - Melihat isi file biner pada shard tertentu
+testshard <key1> ...    - Menampilkan ke shard mana key akan masuk
+exit                    - Keluar dari aplikasi
 ```
