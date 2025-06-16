@@ -1,7 +1,0 @@
-src/Main.java
-src/kvstore/KVStoreLite.java
-src/kvstore/BinaryEncoder.java
-src/kvstore/ShardManager.java
-src/kvstore/Config.java
-src/kvstore/ReplicaManager.java
-src/kvstore/ShardNode.java
