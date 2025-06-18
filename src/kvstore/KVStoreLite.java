@@ -20,39 +20,25 @@ public class KVStoreLite {
     }
 
     /**
-     * Menyimpan pasangan key-value ke hot & cold storage, dan replikasi ke replica.
-     * Gunakan default mode replikasi (sync/non-sync) dari konfigurasi.
+     * Menyimpan pasangan key-value ke hot & cold storage, dan replikasi ke 2 replica (sync + async).
      */
     public void put(String key, String value) {
-        put(key, value, Config.DEFAULT_REPLICATION_SYNC);
+        int shardId = shardManager.getShardId(key);
+        ShardNode primaryShard = shardNodes.get(shardId);
+        primaryShard.put(key, value);
+        replicaManager.replicate(key, value, shardId); // selalu jalankan sync + async
+    }
+
+    /**
+     * Overload agar kompatibel dengan pemanggilan yang masih menggunakan parameter syncReplica.
+     * Meskipun parameter ini diabaikan, tetap kompatibel dengan signature sebelumnya.
+     */
+    public void put(String key, String value, boolean syncReplica) {
+        this.put(key, value);
     }
 
     public ShardManager getShardManager() {
         return this.shardManager;
-    }    
-
-    /**
-     * Overload dengan parameter sync: true untuk sinkron, false untuk asinkron.
-     */
-    public void put(String key, String value, boolean syncReplica) {
-        int shardId = shardManager.getShardId(key);
-        ShardNode primaryShard = shardNodes.get(shardId);
-        primaryShard.put(key, value);
-
-        if (syncReplica) {
-            // Simulasi mode sync
-            if (Config.ENABLE_LOGGING) {
-                System.out.println("[INFO] Menyimpan data dengan replikasi sinkron.");
-            }
-            replicaManager.replicate(key, value, shardId);
-        } else {
-            // Simulasi mode async saja
-            if (Config.ENABLE_LOGGING) {
-                System.out.println("[INFO] Menyimpan data dengan replikasi asinkron.");
-            }
-            // Hanya jalankan async
-            replicaManager.replicate(key, value, shardId);
-        }
     }
 
     /**
@@ -65,7 +51,7 @@ public class KVStoreLite {
     }
 
     /**
-     * Tambahan: Mengecek apakah suatu key ada di hot storage (untuk eksperimen / CLI).
+     * Tambahan: Mengecek apakah suatu key ada di hot storage.
      */
     public boolean containsKey(String key) {
         int shardId = shardManager.getShardId(key);
@@ -73,9 +59,10 @@ public class KVStoreLite {
         return primaryShard.containsKey(key);
     }
 
+    /**
+     * Digunakan untuk menghentikan thread async sebelum keluar CLI.
+     */
     public void shutdown() {
-        replicaManager.shutdown(); // hentikan executor async
+        replicaManager.shutdown();
     }
-    
 }
- 

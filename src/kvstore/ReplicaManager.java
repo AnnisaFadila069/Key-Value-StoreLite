@@ -30,12 +30,10 @@ public class ReplicaManager {
         });
 
         // Simulasi replica 2: sync (langsung jalankan dan tunggu selesai)
-        if (Config.DEFAULT_REPLICATION_SYNC) {
-            if (Config.ENABLE_LOGGING) {
-                System.out.println("[SYNC] Mereplikasi (key=" + key + ") ke replica sync shard " + shardId);
-            }
-            simulateReplicaWrite(key, value, shardId, "sync");
+        if (Config.ENABLE_LOGGING) {
+            System.out.println("[SYNC] Mereplikasi (key=" + key + ") ke replica sync shard " + shardId);
         }
+        simulateReplicaWrite(key, value, shardId, "sync");
     }
 
     /**
@@ -43,18 +41,17 @@ public class ReplicaManager {
      * Untuk prototipe ini, kita bisa log dan (opsional) simpan ke file lain
      */
     private void simulateReplicaWrite(String key, String value, int shardId, String mode) {
-    try {
-        String path = Config.getReplicaDataFile(shardId, mode.equals("sync") ? 0 : 1);
-        File file = new File(path);
-        file.getParentFile().mkdirs(); // pastikan folder tersedia
-        BinaryEncoder.encode(new FileOutputStream(file, true), key, value);
-    } catch (Exception e) {
-        if (Config.ENABLE_LOGGING) {
-            System.err.println("[ERROR] Gagal menulis ke replica " + mode + ": " + e.getMessage());
+        try {
+            String path = Config.getReplicaDataFile(shardId, mode.equals("sync") ? 0 : 1);
+            File file = new File(path);
+            file.getParentFile().mkdirs(); // pastikan folder tersedia
+            BinaryEncoder.encode(new FileOutputStream(file, true), key, value);
+        } catch (Exception e) {
+            if (Config.ENABLE_LOGGING) {
+                System.err.println("[ERROR] Gagal menulis ke replica " + mode + ": " + e.getMessage());
+            }
         }
     }
-}
-
 
     public void shutdown() {
         asyncExecutor.shutdown();

@@ -42,7 +42,7 @@ KVStoreLite/
 2. Buka terminal dan pastikan sudah berada pada directory KVStoreLite
 3. Ketik perintah berikut pada terminal: find src -name "*.java" > sources.txt
 4. Ketik perintah berikut pada terminal: javac -d out @sources.txt
-5. Ketik perintah berikut pada terminal: java -cp out cli.Main
+5. Ketik perintah berikut pada terminal: java -cp out Main
 
 Gunakan perintah interaktif di CLI seperti:
 ```

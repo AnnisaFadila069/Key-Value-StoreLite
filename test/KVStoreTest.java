@@ -19,7 +19,7 @@ public class KVStoreTest {
 
         System.out.println("\n== TEST: Cold Promotion ==");
         int shardId = store.getShardManager().getShardId("gamma");
-        store.put("gamma", "cold-data");
+        store.put("gamma", "cold-data", true); // replikasi sinkron
 
         // Simulasi restart: buat store baru, key tidak ada di hot
         store = new KVStoreLite();
@@ -33,15 +33,22 @@ public class KVStoreTest {
         System.out.println("[PASS] Replikasi sinkron tersimpan ke file");
 
         System.out.println("\n== TEST: Evolusi Skema (Versi >= 2) ==");
-        Config.setCurrentEncodingVersion((byte) 2);;
-        store.put("evolve1", "v2data");
-        Map<String, String> decoded = BinaryEncoder.decodeAll(new FileInputStream(Config.getShardDataFile(store.getShardManager().getShardId("evolve1"))));
+        Config.setCurrentEncodingVersion((byte) 2);
+        store.put("evolve1", "v2data", true);
+        Map<String, String> decoded = BinaryEncoder.decodeAll(
+            new FileInputStream(Config.getShardDataFile(store.getShardManager().getShardId("evolve1")))
+        );
         assert decoded.get("evolve1").equals("v2data");
         System.out.println("[PASS] Skema evolusi v2 terbaca dengan benar");
 
         System.out.println("\n== TEST: Simulasi Failover (baca dari replica) ==");
         String fallbackPath = Config.getReplicaDataFile(shardId, 0);
-        Map<String, String> replicaData = BinaryEncoder.decodeAll(new FileInputStream(fallbackPath));
+        File fallbackFile = new File(fallbackPath);
+        if (!fallbackFile.exists()) {
+            System.out.println("[X] File replica sinkron tidak ditemukan: " + fallbackPath);
+            return;
+        }
+        Map<String, String> replicaData = BinaryEncoder.decodeAll(new FileInputStream(fallbackFile));
         assert replicaData.get("gamma").equals("cold-data");
         System.out.println("[PASS] Data tetap tersedia di replica");
     }

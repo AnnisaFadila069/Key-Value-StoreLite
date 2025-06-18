@@ -6,7 +6,6 @@
 sources.txt
 
 # File data storage (cold & replica)
-data/
 *.dat
 
 # Cache IDE (opsional jika pakai VS Code, IntelliJ, dll)
