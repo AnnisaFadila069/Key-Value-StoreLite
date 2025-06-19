@@ -13,7 +13,7 @@ public class Config {
     // 📁 Direktori penyimpanan cold storage
     public static final String DATA_DIR = "data";
 
-    // 📄 Format nama file per shard
+    // 📄 Format nama file per shard 
     public static String getShardDataFile(int shardId) {
         return Paths.get(DATA_DIR, "colddata-shard" + shardId + ".dat").toString();
     }
@@ -24,7 +24,7 @@ public class Config {
     }
 
     // 🧠 Encoding biner: versi saat ini (dapat diubah saat runtime untuk testing)
-    private static byte CURRENT_ENCODING_VERSION = 1;
+    private static byte CURRENT_ENCODING_VERSION = 2;
     public static byte getCurrentEncodingVersion() {
         return CURRENT_ENCODING_VERSION;
     }

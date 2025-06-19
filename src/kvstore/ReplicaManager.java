@@ -38,7 +38,6 @@ public class ReplicaManager {
 
     /**
      * Simulasi penulisan ke replica
-     * Untuk prototipe ini, kita bisa log dan (opsional) simpan ke file lain
      */
     private void simulateReplicaWrite(String key, String value, int shardId, String mode) {
         try {

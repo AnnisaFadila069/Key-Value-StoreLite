@@ -32,7 +32,10 @@ KVStoreLite/
 │   └── ...                         # Sesuai jumlah shard
 │
 ├── test/                           # Folder pengujian manual/unit test
-│   └── KVStoreTest.java
+│   ├── KVStoreTest.java
+│   └── PerformanceTest.java        # pengujian performa troughout
+│   └── LatencyTest.java            # pengujian performa latency
+│   └── FaultToleranceTest.java     # pengujian performa ketahanan
 │
 ├── README.md                       # Dokumentasi proyek
 ├── .gitignore                      # Abaikan *.class, /data, dll
